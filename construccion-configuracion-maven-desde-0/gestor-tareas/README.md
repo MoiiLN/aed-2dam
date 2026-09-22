@@ -56,11 +56,48 @@
 
 <img width="788" height="616" alt="Captura de pantalla 2026-09-22 110358" src="https://github.com/user-attachments/assets/4d48921c-42f7-4099-bffe-33568f4ecb07" />
 
-Pom.xml final:
+Pom.xml hasta el momento:
 
 <img width="894" height="909" alt="Captura de pantalla 2026-09-22 110922" src="https://github.com/user-attachments/assets/51de495f-b789-44a0-890f-57ca22a5a652" />
 
+14. Añadiendo la dependencia de Gson en el pom.xml y compilando.
 
+<img width="880" height="555" alt="image" src="https://github.com/user-attachments/assets/25897c00-cc8f-49ae-8843-91e45340ce73" />
 
+<img width="1360" height="536" alt="image" src="https://github.com/user-attachments/assets/01201414-f63c-47d3-bb93-badd7a334a3b" />
 
+15. mvn dependency:tree.
 
+<img width="1421" height="291" alt="image" src="https://github.com/user-attachments/assets/cef7f0bb-663d-41e0-ae9d-361c1b376257" />
+
+16. Si quitamos la dependencia de gson e intentamos compilar, lo cual da error y si volvemos a añadir la dependencia y compilamos, será exitoso:
+
+<img width="1462" height="367" alt="image" src="https://github.com/user-attachments/assets/3d54830f-be47-4954-8222-6a2ecba3662f" />
+
+17. Realizamos mvn install.
+
+<img width="744" height="152" alt="image" src="https://github.com/user-attachments/assets/82049368-7482-47d8-afee-7e664b9813bc" />
+
+18. Vemos que se ha descargado correctamente.
+
+<img width="1121" height="76" alt="image" src="https://github.com/user-attachments/assets/30bd754b-b3fa-4a22-ba00-6d4cdf342473" />
+
+19. mvn -o package
+
+<img width="900" height="274" alt="image" src="https://github.com/user-attachments/assets/208a25db-b0ad-4383-afed-83bc63490ef6" />
+
+20. Creando la carpeta config y guardando settings-publico.xml.
+
+<img width="970" height="345" alt="image" src="https://github.com/user-attachments/assets/edcd6c73-2235-406e-aacb-6d49544517ae" />
+
+21. Configuramos los perfiles-
+
+<img width="1222" height="704" alt="image" src="https://github.com/user-attachments/assets/e241b534-a3e2-453f-be14-a095afc96784" />
+
+22. Creamos el .xml de settings-empresa fuera de Git.
+
+<img width="584" height="272" alt="image" src="https://github.com/user-attachments/assets/871ab16e-12a8-4f72-8413-da7979b39832" />
+
+23. Si intentamos ejecutar el comando, dará error.
+
+<img width="2030" height="263" alt="image" src="https://github.com/user-attachments/assets/fa40c506-553d-449d-96e4-3f77f6e95a57" />
