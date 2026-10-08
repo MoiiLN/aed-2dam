@@ -33,17 +33,14 @@ public class ProductoJsonRepository
 
     @Override
     protected List<Producto> readAll() throws IOException {
-        List<Producto> productos = mapper.readValue(
-                path.toFile(), new TypeReference<List<Producto>>() {
-                }
-        );
+        List<Producto> productos = mapper.readValue(path.toFile(), new TypeReference<List<Producto>>() {
+        });
         return productos;
     }
 
     @Override
     protected void writeAll(List<Producto> productos) throws IOException {
-        mapper.writerWithDefaultPrettyPrinter()
-                .writeValue(path.toFile(), productos);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(path.toFile(), productos);
 
     }
 }

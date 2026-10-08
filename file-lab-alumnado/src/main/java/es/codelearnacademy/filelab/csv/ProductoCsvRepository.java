@@ -45,18 +45,18 @@ public class ProductoCsvRepository
 
     @Override
     protected List<Producto> readAll() throws IOException {
-            CSVFormat format = CSVFormat.DEFAULT.builder()
-                    .setHeader()
-                    .setSkipHeaderRecord(true)
-                    .get();
-            List<Producto> productos = new ArrayList<>();
-            try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
-                CSVParser parser = format.parse(reader)) {
-                    for (CSVRecord record : parser) {
-                        productos.add(toProducto(record));
-                    }
+        CSVFormat format = CSVFormat.DEFAULT.builder()
+                .setHeader()
+                .setSkipHeaderRecord(true)
+                .get();
+        List<Producto> productos = new ArrayList<>();
+        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
+             CSVParser parser = format.parse(reader)) {
+            for (CSVRecord record : parser) {
+                productos.add(toProducto(record));
             }
-            return productos;
+        }
+        return productos;
     }
 
     @Override

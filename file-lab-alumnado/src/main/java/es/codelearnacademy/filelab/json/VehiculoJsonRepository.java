@@ -1,6 +1,8 @@
 package es.codelearnacademy.filelab.json;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import es.codelearnacademy.filelab.model.Producto;
 import es.codelearnacademy.filelab.model.Vehiculo;
 import es.codelearnacademy.filelab.repository.AbstractFileRepository;
 import es.codelearnacademy.filelab.repository.IVehiculoRepository;
@@ -21,16 +23,21 @@ public class VehiculoJsonRepository
 
     @Override
     protected String getId(Vehiculo vehiculo) {
-        throw new UnsupportedOperationException("Función no implementada");
+        return vehiculo.matricula();
     }
 
     @Override
     protected List<Vehiculo> readAll() throws IOException {
-        throw new UnsupportedOperationException("Función no implementada");
+        List<Vehiculo> vehiculos = mapper.readValue(
+                path.toFile(), new TypeReference<List<Vehiculo>>() {
+                }
+        );
+        return vehiculos;
     }
 
     @Override
     protected void writeAll(List<Vehiculo> vehiculos) throws IOException {
-        throw new UnsupportedOperationException("Función no implementada");
+        mapper.writerWithDefaultPrettyPrinter()
+                .writeValue(path.toFile(), vehiculos);
     }
 }

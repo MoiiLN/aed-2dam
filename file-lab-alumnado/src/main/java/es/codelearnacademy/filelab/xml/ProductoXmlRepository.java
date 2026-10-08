@@ -26,16 +26,19 @@ public class ProductoXmlRepository
 
     @Override
     protected Long getId(Producto producto) {
-        throw new UnsupportedOperationException("Función no implementada");
+        return producto.id();
     }
 
     @Override
     protected List<Producto> readAll() throws IOException {
-        throw new UnsupportedOperationException("Función no implementada");
+        XmlMapper mapper = new XmlMapper();
+        DocumentoProductos documento = mapper.readValue(path.toFile(), DocumentoProductos.class);
+        return documento.getProductos();
     }
 
     @Override
     protected void writeAll(List<Producto> productos) throws IOException {
-        throw new UnsupportedOperationException("Función no implementada");
+        DocumentoProductos documento = new DocumentoProductos(productos);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(path.toFile(), documento);
     }
 }
