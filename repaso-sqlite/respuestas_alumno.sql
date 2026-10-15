@@ -80,14 +80,6 @@ GROUP BY marca;
 
 -- EJERCICIO 18
 -- Contar productos por tramos de precio.
-SELECT CASE
-           WHEN precio < 20 THEN 'Menos de 20'
-           WHEN precio <= 50 THEN '20 - 50'
-           ELSE 'Más de 50'
-           END AS tramo_precio,
-       COUNT(*) AS total_productos
-FROM Productos
-GROUP BY tramo_precio;
 
 -- EJERCICIO 19
 -- Filtrar marcas con al menos cinco vehículos.
@@ -113,12 +105,6 @@ SELECT ...;
 
 -- EJERCICIO 23
 -- Mostrar productos más caros que la media general.
-SELECT id, nombre, precio
-FROM Productos
-WHERE precio > (
-    SELECT AVG(precio)
-    FROM Productos
-);
 
 -- EJERCICIO 24
 -- Listar los modelos de los vehículos posteriores al año 2020 agrupados por marca.
