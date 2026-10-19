@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class VehiculoDao extends AbstractDao {
+public class VehiculoDao extends AbstractDao<Vehiculo> {
     private  ConexionBD conexionBD;
 
     public VehiculoDao(String url) {

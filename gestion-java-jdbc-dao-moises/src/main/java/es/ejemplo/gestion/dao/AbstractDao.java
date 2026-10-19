@@ -17,9 +17,9 @@ public abstract class AbstractDao<T> extends ConexionBD {
         super(url);
     }
 
-    abstract Producto mapToClass(ResultSet rs);
+    abstract T mapToClass(ResultSet rs);
 
-    public List<Producto> consultar(String query) {
+    public List<T> consultar(String query) {
         List<Producto> products = new ArrayList<>();
         try (Connection connection = this.obtenerConexion()) {
             PreparedStatement ps = connection.prepareStatement(query);
