@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="bc7059ec-ff05-489f-8466-4b2449f3ac97" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repaso-sqlite/respuestas_alumno.sql" beforeDir="false" afterPath="$PROJECT_DIR$/repaso-sqlite/respuestas_alumno.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +35,7 @@
     "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/alumno/Escritorio/gestion-java-jdbc-dao",
+    "last_opened_file_path": "/home/alumno/aed-2dam/gestion-java-jdbc-dao-moises",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
