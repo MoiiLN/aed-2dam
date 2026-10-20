@@ -2,9 +2,6 @@ package es.ejemplo.gestion.dao;
 
 import es.ejemplo.gestion.config.ConexionBD;
 import es.ejemplo.gestion.exception.AplicationException;
-import es.ejemplo.gestion.model.Producto;
-import es.ejemplo.gestion.model.Vehiculo;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,10 +16,9 @@ public abstract class AbstractDao<T> extends ConexionBD {
 
     abstract T mapToClass(ResultSet rs);
 
-    public List<T> consultar(String query) {
-        List<Producto> products = new ArrayList<>();
-        try (Connection connection = this.obtenerConexion()) {
-            PreparedStatement ps = connection.prepareStatement(query);
+    public List<T> consultar(PreparedStatement ps) {
+        List<T> products = new ArrayList<>();
+        try {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 products.add(mapToClass(rs));

@@ -33,20 +33,27 @@ public class ProductoDao extends AbstractDao {
 
     public List<Producto> listar() {
         String query = "SELECT id, nombre, precio FROM Productos";
-        return this.consultar(query);
+        try (Connection connection = this.obtenerConexion()) {
+            PreparedStatement ps = connection.prepareStatement(query);
+            return consultar(ps);
+        } catch (Exception e) {
+            throw new AplicationException(e.getMessage(), e.getCause());
+        }
     }
 
     public Optional<Producto> buscarPorId(int id) {
+        List<Producto> products = null;
         String query = "SELECT id, nombre, precio FROM Productos WHERE id = ?";
         try (Connection connection = this.obtenerConexion()) {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return Optional.of(mapToClass(rs));
-            }
+            products = consultar(ps);
+
         } catch (Exception e) {
             throw new AplicationException(e.getMessage(), e.getCause());
+        }
+        if (products != null && products.size() > 0) {
+            return products.stream().findFirst();
         }
         return Optional.empty();
     }
