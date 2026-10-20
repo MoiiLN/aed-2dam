@@ -33,42 +33,100 @@ public class ProductoDao extends AbstractDao<Producto> {
     // TODO: implementa cada método con PreparedStatement y try-with-resources.
     // IMPORTANTE: buscarPorId y eliminar usan Integer; la clase base NO necesita ID.
     public Optional<Producto> buscarPorId(Integer id) {
+        String query = "SELECT id, nombre, precio FROM Productos WHERE id = ?";
+        try (Connection connection = this.obtenerConexion()) {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, id);
+            return consultarUno(ps);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
         // TODO: SELECT ... WHERE id = ?; ps.setInt(1, id); consultarUno(ps)
-        return Optional.empty();
     }
 
     public boolean eliminar(Integer id) {
+        String sql = "DELETE FROM Productos WHERE id = ?";
+        try (Connection connection = this.obtenerConexion()) {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            return ejecutar(ps);
+        } catch (Exception e){
+            return false;
+        }
         // TODO: DELETE ... WHERE id = ?; ejecutar(ps)
-        return false;
     }
 
     public boolean insertar(Producto p) {
+        String sql = "INSERT INTO Productos VALUES (?, ?, ?)";
+        try (Connection connection = this.obtenerConexion()) {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, p.getId());
+            ps.setString(2, p.getNombre());
+            ps.setDouble(3, p.getPrecio());
+            return ejecutar(ps);
+        } catch (Exception e) {
+            return false;
+        }
         // TODO: validar, INSERT con tres parámetros, ejecutar(ps)
-        return false;
     }
 
     public boolean actualizar(Producto p) {
+        String sql = "UPDATE Productos SET nombre = ?, precio = ? WHERE id = ?";
+        try (Connection connection = this.obtenerConexion()) {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, p.getNombre());
+            ps.setDouble(2, p.getPrecio());
+            ps.setInt(3, p.getId());
+            return ejecutar(ps);
+        } catch (Exception e) {
+            return false;
+        }
         // TODO: validar, UPDATE con parámetros, ejecutar(ps)
-        return false;
     }
 
     public List<Producto> buscarPorNombre(String texto) {
-        // TODO: búsqueda parcial case-insensitive, ordenada por nombre e id
-        return List.of();
+        String query = "SELECT id, nombre, precio FROM Productos WHERE nombre = ?";
+        try (Connection connection = this.obtenerConexion()) {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, texto);
+            return consultar(ps);
+        } catch (Exception e) {
+            return List.of();
+        }
     }
 
     public List<Producto> buscarPorPrecio(double minimo, double maximo) {
+        String query = "SELECT id, nombre, precio FROM Productos WHERE precio BETWEEN ? AND ?";
+        try (Connection connection = this.obtenerConexion()) {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setDouble(1, minimo);
+            ps.setDouble(2, maximo);
+            return consultar(ps);
+        } catch (Exception e) {
+            return List.of();
+        }
         // TODO: BETWEEN inclusivo, ordenado por id
-        return List.of();
     }
 
     public int contar() {
+        String query = "SELECT COUNT(*) FROM Productos";
+        try (Connection connection = this.obtenerConexion()) {
+            PreparedStatement ps = connection.prepareStatement(query);
+            return consultarEntero(ps);
+        } catch (Exception e) {
+            return 0;
+        }
         // TODO: SELECT COUNT(*) y consultarEntero(ps)
-        return 0;
     }
 
     public double precioMedio() {
+        String query = "SELECT AVG(precio) FROM Productos";
+        try (Connection connection = this.obtenerConexion()) {
+            PreparedStatement ps = connection.prepareStatement(query);
+            return consultarDecimal(ps);
+        } catch (Exception e) {
+            return 0.0;
+        }
         // TODO: COALESCE(AVG(precio),0) y consultarDecimal(ps)
-        return 0;
     }
 }
