@@ -1,5 +1,6 @@
 package es.ejemplo.gestion.dao;
 
+import es.ejemplo.gestion.model.Producto;
 import es.ejemplo.gestion.model.Vehiculo;
 import java.sql.*;
 import java.util.*;
@@ -9,25 +10,30 @@ public class VehiculoDao extends AbstractDao<Vehiculo> {
 
     @Override
     protected Optional<Vehiculo> mapRsToClass(ResultSet rs) {
+        try {
+            return Optional.of(new Vehiculo(rs.getString("matricula"), rs.getString("marca"), rs.getString("modelo"), rs.getInt("anio")));
+        } catch (SQLException | RuntimeException e) {
+            registrar("mapRsToClass vehiculo", e);
+            return Optional.empty();
+        }
         // TODO: leer matricula, marca, modelo, anio con rs.getXXX(...)
         // Capturar SQLException y RuntimeException aquí; nunca declarar throws.
-        return Optional.empty();
     }
 
     public List<Vehiculo> listar() {
-        String sql = "SELECT matricula, marca, modelo, anio FROM Vehiculos ORDER BY matricula";
+        String sql = "SELECT UPPER(matricula) AS matricula, UPPER(marca) AS marca, UPPER(modelo) AS modelo, anio AS anio FROM Vehiculos ORDER BY matricula";
         try (Connection con = obtenerConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             return consultar(ps);
         } catch (SQLException | RuntimeException e) {
-            registrar("listar productos", e);
+            registrar("listar Vehiculos", e);
             return List.of();
         }
         // TODO: seguir el ejemplo de ProductoDao.listar()
     }
 
     public Optional<Vehiculo> buscarPorId(String matricula) {
-        String query = "SELECT id, nombre, precio FROM Productos WHERE matricula = ?";
+        String query = "SELECT matricula, marca, modelo, anio FROM Vehiculos WHERE matricula = ?";
         try (Connection connection = this.obtenerConexion()) {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, matricula);
@@ -39,11 +45,11 @@ public class VehiculoDao extends AbstractDao<Vehiculo> {
     }
 
     public Optional<Vehiculo> buscarPorMatricula(String matricula) {
-        String query = "SELECT matricula, marca, modelo, anio FROM Productos WHERE matricula = ?";
+        String query = "SELECT matricula, marca, modelo, anio FROM Vehiculos WHERE matricula = ?";
         try (Connection connection = this.obtenerConexion()) {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, matricula);
-            return consultarUno(ps);
+            return buscarPorId(matricula);
         } catch (Exception e) {
             return Optional.empty();
         }
@@ -51,7 +57,7 @@ public class VehiculoDao extends AbstractDao<Vehiculo> {
     }
 
     public boolean eliminar(String matricula) {
-        String sql = "DELETE FROM Productos WHERE matricula = ?";
+        String sql = "DELETE FROM Vehiculos WHERE matricula = ?";
         try (Connection connection = this.obtenerConexion()) {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, matricula);
@@ -78,7 +84,7 @@ public class VehiculoDao extends AbstractDao<Vehiculo> {
     }
 
     public boolean actualizar(Vehiculo v) {
-        String sql = "UPDATE Productos SET marca = ?, modelo = ?, anio = ? WHERE matricula = ?";
+        String sql = "UPDATE Vehiculos SET marca = ?, modelo = ?, anio = ? WHERE matricula = ?";
         try (Connection connection = this.obtenerConexion()) {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, v.getMarca());
@@ -93,7 +99,7 @@ public class VehiculoDao extends AbstractDao<Vehiculo> {
     }
 
     public List<Vehiculo> buscarPorMarca(String texto) {
-        String query = "SELECT matricula, marca, modelo, anio FROM Productos WHERE marca = ?";
+        String query = "SELECT matricula, marca, modelo, anio FROM Vehiculos WHERE LOWER(marca) LIKE ?";
         try (Connection connection = this.obtenerConexion()) {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, texto);
@@ -105,17 +111,37 @@ public class VehiculoDao extends AbstractDao<Vehiculo> {
     }
 
     public List<Vehiculo> buscarPorAnio(int desde, int hasta) {
+        String query = "SELECT matricula, marca, modelo, anio FROM Vehiculos WHERE anio BETWEEN ? AND ?";
+        try (Connection connection = this.obtenerConexion()) {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, desde);
+            ps.setInt(2, hasta);
+            return consultar(ps);
+        } catch (Exception e) {
+            return List.of();
+        }
         // TODO: BETWEEN inclusivo
-        return List.of();
     }
 
     public int contar() {
+        String query = "SELECT COUNT(*) FROM Vehiculos";
+        try (Connection connection = this.obtenerConexion()) {
+            PreparedStatement ps = connection.prepareStatement(query);
+            return consultarEntero(ps);
+        } catch (Exception e) {
+            return 0;
+        }
         // TODO: consultarEntero(ps)
-        return 0;
     }
 
     public Map<String, Integer> contarPorMarca() {
+        String query = "SELECT marca, COUNT(*) FROM Vehiculos GROUP BY marca";
+        try (Connection connection = this.obtenerConexion()) {
+            PreparedStatement ps = connection.prepareStatement(query);
+            return consultarAgrupado(ps);
+        } catch (Exception e) {
+            return Map.of();
+        }
         // TODO: GROUP BY marca y consultarAgrupado(ps)
-        return Map.of();
     }
 }

@@ -85,10 +85,10 @@ public class ProductoDao extends AbstractDao<Producto> {
     }
 
     public List<Producto> buscarPorNombre(String texto) {
-        String query = "SELECT id, nombre, precio FROM Productos WHERE nombre = ?";
+        String query = "SELECT id, nombre, precio FROM Productos WHERE LOWER(nombre) LIKE LOWER(?) ORDER BY id DESC";
         try (Connection connection = this.obtenerConexion()) {
             PreparedStatement ps = connection.prepareStatement(query);
-            ps.setString(1, texto);
+            ps.setString(1, "%" + texto + "%");
             return consultar(ps);
         } catch (Exception e) {
             return List.of();
