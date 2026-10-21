@@ -45,14 +45,7 @@ public class VehiculoDao extends AbstractDao<Vehiculo> {
     }
 
     public Optional<Vehiculo> buscarPorMatricula(String matricula) {
-        String query = "SELECT matricula, marca, modelo, anio FROM Vehiculos WHERE matricula = ?";
-        try (Connection connection = this.obtenerConexion()) {
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setString(1, matricula);
             return buscarPorId(matricula);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
         // TODO: delegar en buscarPorId(matricula)
     }
 
@@ -99,7 +92,7 @@ public class VehiculoDao extends AbstractDao<Vehiculo> {
     }
 
     public List<Vehiculo> buscarPorMarca(String texto) {
-        String query = "SELECT matricula, marca, modelo, anio FROM Vehiculos WHERE LOWER(marca) LIKE ?";
+        String query = "SELECT matricula, marca, modelo, anio FROM Vehiculos WHERE LOWER(marca) = ?";
         try (Connection connection = this.obtenerConexion()) {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, texto);

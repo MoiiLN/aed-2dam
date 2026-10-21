@@ -1,0 +1,22 @@
+-------------------------------------------------------------------------------
+Test set: es.ejemplo.gestion.ConexionBDTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 1, Errors: 1, Skipped: 0, Time elapsed: 0.020 s <<< FAILURE! -- in es.ejemplo.gestion.ConexionBDTest
+es.ejemplo.gestion.ConexionBDTest.conectaConBaseDePruebas -- Time elapsed: 0.006 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "java.sql.Connection.isClosed()" because "con" is null
+	at es.ejemplo.gestion.ConexionBDTest.conectaConBaseDePruebas(ConexionBDTest.java:12)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:583)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+
+es.ejemplo.gestion.ConexionBDTest.fallaSiNoExisteLaBase -- Time elapsed: 0.004 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Expected es.ejemplo.gestion.exception.AplicationException to be thrown, but nothing was thrown.
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:73)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128)
+	at es.ejemplo.gestion.ConexionBDTest.fallaSiNoExisteLaBase(ConexionBDTest.java:18)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:583)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+
