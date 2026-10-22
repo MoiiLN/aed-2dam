@@ -1,4 +1,4 @@
-package es.ejemplo.gestion.dao;
+﻿package es.ejemplo.gestion.dao;
 
 import es.ejemplo.gestion.config.ConexionBD;
 import java.sql.*;
