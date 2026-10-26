@@ -109,11 +109,29 @@ public final class ClienteDao extends AbstractDao<Cliente> implements IClienteDa
             throw new NullPointerException();
         }
         String sql = "DELETE FROM clientes WHERE id = ?";
+        comprobarClienteConMascota(id);
         try (Connection con = ConexionDB.abrir(url);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
             return ejecutar(ps);
         } catch (SQLException e) {
+            throw new DaoException(e.getMessage(), e.getCause());
+        }
+    }
+    public void comprobarClienteConMascota(Integer id) {
+        String query = "SELECT COUNT(*) FROM mascotas WHERE id_cliente = ?";
+        try (Connection con = ConexionDB.abrir(url);
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int cantidad = rs.getInt(1);
+                    if (cantidad > 0) {
+                        throw new DaoException("El cliente tiene mascota", null);
+                    }
+                }
+            }
+        } catch (Exception e) {
             throw new DaoException(e.getMessage(), e.getCause());
         }
     }

@@ -67,6 +67,7 @@ public final class MascotaDao extends AbstractDao<Mascota> implements IMascotaDa
             return 0;
         }
         String sql = "INSERT INTO mascotas (nombre, especie, raza, fecha_nacimiento, id_cliente) VALUES (?, ?, ?, ?, ?)";
+        comprobarPropietarioMascota(entidad.getIdCliente());
         try (Connection con = ConexionDB.abrir(url);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, entidad.getNombre());
@@ -117,6 +118,7 @@ public final class MascotaDao extends AbstractDao<Mascota> implements IMascotaDa
         if (id == null) {
             throw new NullPointerException();
         }
+
         String sql = "DELETE FROM mascotas WHERE id = ?";
         try (Connection con = ConexionDB.abrir(url);
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -158,6 +160,25 @@ public final class MascotaDao extends AbstractDao<Mascota> implements IMascotaDa
             return List.of();
         }
     }
+
+    public void comprobarPropietarioMascota(Integer id) {
+        String query = "SELECT COUNT(*) FROM clientes WHERE id = ?";
+        try (Connection con = ConexionDB.abrir(url);
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int cantidad = rs.getInt(1);
+                    if (cantidad == 0) {
+                        throw new DaoException("La mascota no tiene propietario", null);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DaoException(e.getMessage(), e.getCause());
+        }
+    }
+
 }
 
 

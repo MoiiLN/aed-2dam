@@ -114,6 +114,7 @@ public final class ConsultaDao extends AbstractDao<Consulta> implements IConsult
          throw new NullPointerException();
      }
      String sql = "DELETE FROM consultas WHERE id = ?";
+     comprobarConsultaConTratamiento(id);
      try (Connection con = ConexionDB.abrir(url);
           PreparedStatement ps = con.prepareStatement(sql)) {
          ps.setInt(1, id);
@@ -166,5 +167,21 @@ public final class ConsultaDao extends AbstractDao<Consulta> implements IConsult
          return List.of();
      }
  }
- 
+    public void comprobarConsultaConTratamiento(Integer id) {
+        String query = "SELECT COUNT(*) FROM tratamientos WHERE id_consulta = ?";
+        try (Connection con = ConexionDB.abrir(url);
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int cantidad = rs.getInt(1);
+                    if (cantidad > 0) {
+                        throw new DaoException("La consulta tiene tratamiento", null);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DaoException(e.getMessage(), e.getCause());
+        }
+    }
 }
