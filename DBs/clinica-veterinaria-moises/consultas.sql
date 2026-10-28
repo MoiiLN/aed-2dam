@@ -19,5 +19,3 @@ SELECT m.nombre AS mascota, c.nombre AS propietario FROM mascotas m, clientes c 
 -- 9. Importe tratamientos, incluyendo consultas sin tratamientos
 
 -- 10. Consultas sin tratamientos
-
--- Soy consciente de que utilizar el asterisco no es eficiente.
