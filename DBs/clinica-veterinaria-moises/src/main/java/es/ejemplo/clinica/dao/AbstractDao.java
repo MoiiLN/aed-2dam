@@ -14,6 +14,9 @@ public abstract class AbstractDao<T> {
     protected abstract Optional<T> mapRsToClass(ResultSet rs);
 
     public List<T> listar(PreparedStatement ps) {
+        if (ps == null) {
+            return List.of();
+        }
         try (ResultSet rs = ps.executeQuery()) {
             List<T> list = new ArrayList<>();
             while (rs.next()) {
@@ -29,8 +32,11 @@ public abstract class AbstractDao<T> {
         }
     }
     public Optional<T> buscarPorId(PreparedStatement ps) {
+        if (ps == null) {
+            return Optional.empty();
+        }
         try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
+            if (rs.next()) {
                 return mapRsToClass(rs);
             }
         } catch (Exception e) {
@@ -43,13 +49,10 @@ public abstract class AbstractDao<T> {
             return 0;
         }
         try {
-            if (ps.executeUpdate() > 0) {
-                return 1;
-            }
+            return ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException(e.getMessage(), e.getCause());
         }
-        return 0;
     }
 }
 
@@ -72,7 +75,7 @@ public abstract class AbstractDao<T> {
 //         return resultado;
 //
 //     } catch (SQLException | RuntimeException e) {
-//         registrar("consultar", e);
+//
 //         return List.of();
 //     }
 // }
@@ -82,9 +85,7 @@ public abstract class AbstractDao<T> {
 //
 //     try (ResultSet rs = ps.executeQuery()) {
 //         return rs.next() ? mapRsToClass(rs) : Optional.empty();
-//
 //     } catch (SQLException | RuntimeException e) {
-//         registrar("consultarUno", e);
 //         return Optional.empty();
 //     }
 // }
@@ -96,7 +97,7 @@ public abstract class AbstractDao<T> {
 //         return ps.executeUpdate() > 0;
 //
 //     } catch (SQLException | RuntimeException e) {
-//         registrar("ejecutar", e);
+//
 //         return false;
 //     }
 // }
@@ -108,7 +109,7 @@ public abstract class AbstractDao<T> {
 //         return rs.next() ? rs.getInt(1) : 0;
 //
 //     } catch (SQLException | RuntimeException e) {
-//         registrar("consultarEntero", e);
+//
 //         return 0;
 //     }
 // }
@@ -120,7 +121,7 @@ public abstract class AbstractDao<T> {
 //         return rs.next() ? rs.getDouble(1) : 0;
 //
 //     } catch (SQLException | RuntimeException e) {
-//         registrar("consultarDecimal", e);
+//
 //         return 0;
 //     }
 // }
@@ -138,11 +139,8 @@ public abstract class AbstractDao<T> {
 //         return mapa;
 //
 //     } catch (SQLException | RuntimeException e) {
-//         registrar("consultarAgrupado", e);
+//
 //         return Map.of();
 //     }
 // }
 //
-// protected void registrar(String operacion, Exception e) {
-//     LOG.log(Level.WARNING, "Fallo JDBC: " + operacion, e);
-// }

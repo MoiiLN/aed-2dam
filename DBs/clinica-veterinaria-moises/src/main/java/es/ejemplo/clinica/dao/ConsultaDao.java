@@ -78,7 +78,7 @@ public final class ConsultaDao extends AbstractDao<Consulta> implements IConsult
                          return idGenerado;
                      }
                  }
-             }
+             } 
          }
      } catch (SQLException e) {
          throw new DaoException(e.getMessage(), e.getCause());

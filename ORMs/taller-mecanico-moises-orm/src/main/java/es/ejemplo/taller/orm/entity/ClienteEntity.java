@@ -1,12 +1,13 @@
 package es.ejemplo.taller.orm.entity;
 
+import es.ejemplo.taller.orm.repository.IRepository;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "clientes")
 public class ClienteEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // La base de datos generará el id_cliente automaticamente.
     @Column(name = "id_cliente")
     private Integer idCliente;
 
@@ -60,5 +61,6 @@ public class ClienteEntity {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+
     // Genera getters y setters de los cuatro atributos con el IDE.
 }
