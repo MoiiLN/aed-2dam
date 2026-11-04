@@ -46,10 +46,6 @@ public class ClienteEntity {
         return email;
     }
 
-    public void setIdCliente(Integer idCliente) {
-        this.idCliente = idCliente;
-    }
-
     public void setEmail(String email) {
         this.email = email;
     }

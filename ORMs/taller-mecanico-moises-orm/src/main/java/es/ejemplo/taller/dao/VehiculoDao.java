@@ -1,23 +1,58 @@
 package es.ejemplo.taller.dao;
 import es.ejemplo.taller.modelo.Vehiculo;
+import es.ejemplo.taller.orm.config.OrmFactory;
+import es.ejemplo.taller.orm.entity.ClienteEntity;
+import es.ejemplo.taller.orm.entity.VehiculoEntity;
+import es.ejemplo.taller.orm.mapper.ClienteMapper;
+import es.ejemplo.taller.orm.mapper.VehiculoMapper;
+import jakarta.persistence.EntityManagerFactory;
+
 import java.sql.*;
 import java.util.*;
 import java.math.BigDecimal;
 public class VehiculoDao  {
     private final String url;
-    public VehiculoDao(String url) { this.url = url; }
+    private final EntityManagerFactory managerFactory;
+    public VehiculoDao(String url) {
+        this.url = url;
+        managerFactory = OrmFactory.crear(url);
+    }
 
     public List<Vehiculo> listar() {
-        // TODO: implementar según el contrato del README.
-        return List.of();
+        try (var em = managerFactory.createEntityManager()) {
+            return em.createQuery(
+                            "select c from VehiculoEntity c order by c.nombre",
+                            VehiculoEntity.class)
+                    .getResultStream()
+                    .map(VehiculoMapper::toDomain)
+                    .toList();
+        }
     }
     public Optional<Vehiculo> buscarPorId(String id) {
-        // TODO: implementar según el contrato del README.
-        return Optional.empty();
+        try (var em = managerFactory.createEntityManager()) {
+            return Optional.ofNullable(em.find(VehiculoEntity.class, id))
+                    .map(VehiculoMapper::toDomain);
+        }
     }
     public int insertar(Vehiculo dato) {
-        // TODO: implementar según el contrato del README.
-        return 0;
+        if (dato == null) {
+            return 0;
+        }
+        try (var em = managerFactory.createEntityManager()) {
+            var tx = em.getTransaction();
+            try {
+                tx.begin();
+                VehiculoEntity entidad = VehiculoMapper.toEntity(dato);
+                em.persist(entidad);
+                em.flush(); // Necesario aquí para leer inmediatamente el ID generado
+                dato.setIdCliente(entidad.getIdCliente());
+                tx.commit();
+                return dato.getIdCliente();
+            } catch (RuntimeException ex) {
+                if (tx.isActive()) tx.rollback();
+                return 0;
+            }
+        }
     }
     public int actualizar(Vehiculo dato) {
         // TODO: implementar según el contrato del README.
