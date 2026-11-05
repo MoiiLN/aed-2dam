@@ -21,16 +21,19 @@ public class VehiculoDao  {
     public List<Vehiculo> listar() {
         try (var em = managerFactory.createEntityManager()) {
             return em.createQuery(
-                            "select c from VehiculoEntity c order by c.nombre",
+                            "select v from VehiculoEntity v",
                             VehiculoEntity.class)
                     .getResultStream()
                     .map(VehiculoMapper::toDomain)
                     .toList();
         }
     }
-    public Optional<Vehiculo> buscarPorId(String id) {
+    public Optional<Vehiculo> buscarPorId(String matricula) {
+        if (matricula == null) {
+            return Optional.empty();
+        }
         try (var em = managerFactory.createEntityManager()) {
-            return Optional.ofNullable(em.find(VehiculoEntity.class, id))
+            return Optional.ofNullable(em.find(VehiculoEntity.class, matricula))
                     .map(VehiculoMapper::toDomain);
         }
     }
@@ -54,20 +57,65 @@ public class VehiculoDao  {
             }
         }
     }
-    public int actualizar(Vehiculo dato) {
-        // TODO: implementar según el contrato del README.
-        return 0;
+    public int actualizar(Vehiculo vehiculo) {
+        try (var em = managerFactory.createEntityManager()) {
+            var tx = em.getTransaction();
+            try {
+                tx.begin();
+                VehiculoEntity v = em.find(VehiculoEntity.class, vehiculo.getMatricula());
+                if (v == null) {
+                    tx.commit();
+                    return 0;
+                }
+                VehiculoEntity vehiculoEntityActualizado = VehiculoMapper.toEntity(vehiculo);
+                v.setMarca(vehiculoEntityActualizado.getMarca()); // dirty checking
+                v.setModelo(vehiculoEntityActualizado.getModelo());
+                v.setAnio(vehiculoEntityActualizado.getAnio());
+                tx.commit(); // Hibernate detecta el cambio
+                return 1;
+            } catch (RuntimeException ex) {
+                if (tx.isActive()) tx.rollback();
+                throw ex;
+            }
+        }
     }
     public int eliminar(String id) {
-        // TODO: implementar según el contrato del README.
-        return 0;
+        try (var em = managerFactory.createEntityManager()) {
+            var tx = em.getTransaction();
+            try {
+                tx.begin();
+                VehiculoEntity v = em.find(VehiculoEntity.class, id);
+                if (v == null) {
+                    tx.commit();
+                    return 0;
+                }
+                em.remove(v);
+                tx.commit();
+                return 1;
+            } catch (RuntimeException ex) {
+                if (tx.isActive()) tx.rollback();
+                throw ex;
+            }
+        }
     }
-    public List<Vehiculo> buscarPorCliente(Integer idCliente) {
-        // TODO: implementar según el contrato del README.
-        return List.of();
+    public List<Vehiculo> buscarPorCliente(Integer id) {
+        if (id == null) {
+            return List.of();
+        }
+        try (var em = managerFactory.createEntityManager()) {
+            return em.createQuery(
+                    "select v from VehiculoEntity v where v.idCliente = :id",
+                    VehiculoEntity.class).setParameter("id", id).getResultStream().map(VehiculoMapper::toDomain).toList();
+        }
     }
     public List<Vehiculo> listarPorMarca(String marca) {
-        // TODO: implementar según el contrato del README.
-        return List.of();
+        if (marca == null) {
+            return List.of();
+        }
+        try (var em = managerFactory.createEntityManager()) {
+            return em.createQuery(
+                    "select v from VehiculoEntity v where v.marca = :marca",
+                    VehiculoEntity.class).setParameter("marca", marca).getResultStream().map(VehiculoMapper::toDomain).toList();
+        }
     }
 }

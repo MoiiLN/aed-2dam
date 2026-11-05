@@ -34,6 +34,9 @@ public class VehiculoEntity {
         this.idCliente = idCliente;
     }
 
+    public VehiculoEntity() {
+    }
+
     public Integer getIdCliente() {
         return idCliente;
     }

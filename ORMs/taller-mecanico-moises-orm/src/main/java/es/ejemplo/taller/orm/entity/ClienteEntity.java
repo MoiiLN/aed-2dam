@@ -3,6 +3,9 @@ package es.ejemplo.taller.orm.entity;
 import es.ejemplo.taller.orm.repository.IRepository;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "clientes")
 public class ClienteEntity {
@@ -21,6 +24,9 @@ public class ClienteEntity {
     private String telefono;
 
     protected ClienteEntity() {} // Necesario para JPA
+
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
+    private List<VehiculoEntity> vehiculos = new ArrayList<>();
 
     public ClienteEntity(Integer idCliente, String nombre,
                          String email, String telefono) {
@@ -58,5 +64,8 @@ public class ClienteEntity {
         this.telefono = telefono;
     }
 
-    // Genera getters y setters de los cuatro atributos con el IDE.
+    public List<VehiculoEntity> getVehiculos() {
+        return vehiculos;
+    }
+// Genera getters y setters de los cuatro atributos con el IDE.
 }
