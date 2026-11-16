@@ -148,8 +148,8 @@ public class LibroDao implements AutoCloseable {
     
     public List<Libro> masPrestadosQueMedia() {
         try (var em = managerFactory.createEntityManager()) {
-            return em.createQuery("select l from PrestamoEntity p JOIN p.libro l", LibroEntity.class).getResultStream().map(LibroMapper::toDomain).toList();
-        } //
+            return em.createQuery("select l, p from LibroEntity l JOIN PrestamoEntity p on p.idLibro = l.idLibro where count(p) > avg(p) group by l", LibroEntity.class).getResultStream().map(LibroMapper::toDomain).toList();
+        }
     }
     
     public List<Libro> reservadosSinDisponibilidad() {
