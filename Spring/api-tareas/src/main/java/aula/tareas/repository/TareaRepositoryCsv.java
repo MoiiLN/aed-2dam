@@ -2,7 +2,12 @@ package aula.tareas.repository;
 
 import aula.tareas.modelo.Tarea;
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -36,6 +41,18 @@ public class TareaRepositoryCsv implements ITareaRepository{
         if (Files.notExists(path)) {
             return new ArrayList<>();
         }
+        List<Tarea> result = new ArrayList<>();
+        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
+             CSVParser parser = inputFormat.parse(reader)) {
+            for (CSVRecord row : parser) {
+                result.add(new Tarea(
+                        Long.parseLong(row.get("id")),
+                        row.get("titulo")));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
     @Override
