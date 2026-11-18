@@ -7,17 +7,18 @@ import aula.tareas.service.*;
 import aula.tareas.modelo.Tarea;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/tareas")
-class TareaController {
-    private final TareaService servicio;
+@RequestMapping("/api/csv/tareas")
+class TareaControllerCsv {
+    private final TareaServiceCsv servicio;
 
     // @AutoWired
-    // Tareaservice servicio2;
-    TareaController(TareaService servicio) {
+    // Tareaservice servicio;
+    TareaControllerCsv(@Qualifier("tareaServiceCsv") TareaServiceCsv servicio) {
         this.servicio = servicio;
     }
 

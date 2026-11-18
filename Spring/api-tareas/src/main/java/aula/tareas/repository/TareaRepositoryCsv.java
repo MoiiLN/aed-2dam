@@ -5,6 +5,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -14,9 +15,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.atomic.AtomicLong;
 
+@Repository("repositoryCsv")
 public class TareaRepositoryCsv implements ITareaRepository{
-
+    private final AtomicLong secuencia = new AtomicLong();
     private Path path;
     private CSVFormat inputFormat = CSVFormat.DEFAULT.builder()
             .setHeader()
@@ -33,16 +37,7 @@ public class TareaRepositoryCsv implements ITareaRepository{
 
     @Override
     public Tarea create(String titulo) {
-        List<Tarea> tareas = findAll();
-        if (tareas.stream().anyMatch(t -> t.id() == tarea.id())) {
-            throw new IllegalArgumentException("Id duplicado: " + tarea.id());
-        }
-        tareas.add(tarea);
-        try {
-            saveAll(tareas);
-        } catch (IOException e) {
-            return tarea;
-        }
+        return null;
     }
 
     @Override
@@ -80,7 +75,8 @@ public class TareaRepositoryCsv implements ITareaRepository{
 
     @Override
     public Tarea findById(long identificador) {
-        return findAll().stream().filter(t -> t.id() == identificador).findFirst();
+//        return findAll().stream().filter(t -> t.id() == identificador).findFirst();
+        return null;
     }
 
     @Override
