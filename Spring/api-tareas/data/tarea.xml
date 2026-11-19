@@ -1,0 +1,10 @@
+<tareas>
+  <tarea>
+    <id>1</id>
+    <titulo>string</titulo>
+  </tarea>
+  <tarea>
+    <id>2</id>
+    <titulo>string</titulo>
+  </tarea>
+</tareas>
