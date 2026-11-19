@@ -1,6 +1,6 @@
 package aula.tareas.controller;
 
-import aula.tareas.modelo.Tarea;
+import aula.tareas.api.TareaRequest;
 import aula.tareas.service.TareaServiceXml;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,7 +28,7 @@ public class TareaControllerXml {
     @GetMapping
     @Operation(summary = "Obtener todas las tareas desde el fichero Xml.")
     @ApiResponses(@ApiResponse(responseCode = "200", description = "Se obtiene el listado de tareas."))
-    List<Tarea> listar() {
+    List<TareaRequest> listar() {
         return servicio.listar();
     }
 
@@ -38,7 +38,7 @@ public class TareaControllerXml {
             @ApiResponse(responseCode = "200", description = "Tarea encontrada correctamente."),
             @ApiResponse(responseCode = "404", description = "Tarea no encontrada.")
     })
-    ResponseEntity<Tarea> buscar(@PathVariable long id) {
+    ResponseEntity<TareaRequest> buscar(@PathVariable long id) {
         return ResponseEntity.ofNullable(servicio.buscar(id));
     }
 
@@ -48,9 +48,9 @@ public class TareaControllerXml {
             @ApiResponse(responseCode = "201", description = "Tarea creada correctamente."),
             @ApiResponse(responseCode = "400", description = "Tarea ya existe.")
     })
-    ResponseEntity<Tarea> crear(@Valid @RequestBody TareaControllerCsv.NuevaTarea peticion) {
-        Tarea tarea = servicio.crear(peticion.titulo());
-        return ResponseEntity.created(URI.create("/api/tareas/" + tarea.id())).body(tarea);
+    ResponseEntity<TareaRequest> crear(@Valid @RequestBody TareaControllerCsv.NuevaTarea peticion) {
+        TareaRequest tareaRequest = servicio.crear(peticion.titulo());
+        return ResponseEntity.created(URI.create("/api/tareas/" + tareaRequest.id())).body(tareaRequest);
     }
 
     public record NuevaTarea(@NotBlank String titulo) {}

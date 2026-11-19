@@ -1,10 +1,10 @@
-<tareas>
-  <tarea>
+<tareaRequests>
+  <tareaRequest>
     <id>1</id>
     <titulo>string</titulo>
-  </tarea>
-  <tarea>
+  </tareaRequest>
+  <tareaRequest>
     <id>2</id>
     <titulo>string</titulo>
-  </tarea>
-</tareas>
+  </tareaRequest>
+</tareaRequests>

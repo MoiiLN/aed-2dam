@@ -1,6 +1,6 @@
 package aula.tareas.repository;
 
-import aula.tareas.modelo.Tarea;
+import aula.tareas.api.TareaRequest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Repository;
@@ -18,7 +18,7 @@ public class TareaRepositoryJson implements ITareaRepository{
     private Path path;
     private ObjectMapper mapper;
     private final String url = "jdbc:sqlite:data/tarea.sqlite3 / db";
-    private List<Tarea> lista;
+    private List<TareaRequest> lista;
 
     public TareaRepositoryJson() {
         //path = Path.of("data", "tarea.json");
@@ -48,9 +48,9 @@ public class TareaRepositoryJson implements ITareaRepository{
     }
 
     @Override
-    public Tarea create(String titulo) {
+    public TareaRequest create(String titulo) {
         long id = secuencia.incrementAndGet();
-        var tarea = new Tarea(id, titulo.strip());
+        var tarea = new TareaRequest(id, titulo.strip());
         lista.add(tarea);
         saveAll(lista);
         return tarea;
@@ -58,26 +58,31 @@ public class TareaRepositoryJson implements ITareaRepository{
 
     @Override
     public boolean delete(Long identificador) {
-        return false;
+        List<TareaRequest> tareaRequests = findAll();
+        boolean removed = tareaRequests.removeIf(t -> t.id() == identificador);
+        if (removed) {
+            saveAll(tareaRequests);
+        }
+        return removed;
     }
 
 
     @Override
-    public List<Tarea> findAll() {
+    public List<TareaRequest> findAll() {
         return List.copyOf(lista);
     }
 
     @Override
-    public Tarea findById(long identificador) {
-        return null;
+    public TareaRequest findById(long identificador) {
+        return findAll().stream().filter(t -> t.id() == identificador).findFirst().orElse(null);
     }
 
     @Override
-    public Tarea update(Tarea tarea) {
+    public TareaRequest update(TareaRequest tareaRequest) {
         return null;
     }
 
-    private void saveAll(List<Tarea> items) {
+    private void saveAll(List<TareaRequest> items) {
         try {
             Path parent = path.getParent();
             if (parent != null) {
@@ -90,10 +95,10 @@ public class TareaRepositoryJson implements ITareaRepository{
 
     }
 
-    public List<Tarea> getAll() {
+    public List<TareaRequest> getAll() {
         try {
             return new ArrayList<>(mapper.readValue(
-                    path.toFile(), new TypeReference<List<Tarea>>() {}));
+                    path.toFile(), new TypeReference<List<TareaRequest>>() {}));
         }catch (Exception exception) {
             //Logger
             return new ArrayList<>();

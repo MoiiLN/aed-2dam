@@ -3,8 +3,8 @@ package aula.tareas.controller;
 import java.net.URI;
 import java.util.List;
 
+import aula.tareas.api.TareaRequest;
 import aula.tareas.service.*;
-import aula.tareas.modelo.Tarea;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -30,7 +30,7 @@ class TareaControllerCsv {
     @GetMapping
     @Operation(summary = "Obtener todas las tareas desde el fichero Csv.")
     @ApiResponses(@ApiResponse(responseCode = "200", description = "Se obtiene el listado de tareas."))
-    List<Tarea> listar() {
+    List<TareaRequest> listar() {
         return servicio.listar();
     }
 
@@ -40,7 +40,7 @@ class TareaControllerCsv {
             @ApiResponse(responseCode = "200", description = "Tarea encontrada correctamente."),
             @ApiResponse(responseCode = "404", description = "Tarea no encontrada.")
     })
-    ResponseEntity<Tarea> buscar(@PathVariable long id) {
+    ResponseEntity<TareaRequest> buscar(@PathVariable long id) {
         return ResponseEntity.ofNullable(servicio.buscar(id));
     }
 
@@ -50,9 +50,9 @@ class TareaControllerCsv {
             @ApiResponse(responseCode = "201", description = "Tarea creada correctamente."),
             @ApiResponse(responseCode = "400", description = "Tarea ya existe.")
     })
-    ResponseEntity<Tarea> crear(@Valid @RequestBody NuevaTarea peticion) {
-        Tarea tarea = servicio.crear(peticion.titulo());
-        return ResponseEntity.created(URI.create("/api/tareas/" + tarea.id())).body(tarea);
+    ResponseEntity<TareaRequest> crear(@Valid @RequestBody NuevaTarea peticion) {
+        TareaRequest tareaRequest = servicio.crear(peticion.titulo());
+        return ResponseEntity.created(URI.create("/api/tareas/" + tareaRequest.id())).body(tareaRequest);
     }
 
     public record NuevaTarea(@NotBlank String titulo) {}

@@ -1,6 +1,6 @@
 package aula.tareas.repository;
 
-import aula.tareas.modelo.Tarea;
+import aula.tareas.api.TareaRequest;
 import org.springframework.stereotype.Repository;
 import tools.jackson.dataformat.xml.XmlMapper;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -19,17 +19,17 @@ public class TareaRepositoryXml implements ITareaRepository {
     public static class DocumentoTareas {
         @JacksonXmlElementWrapper(useWrapping = false)
         @JacksonXmlProperty(localName = "tarea")
-        public List<Tarea> tareas = new ArrayList<>();
+        public List<TareaRequest> tareaRequests = new ArrayList<>();
 
         public DocumentoTareas() {}
-        public DocumentoTareas(List<Tarea> tareas) {
-            this.tareas = new ArrayList<>(tareas);
+        public DocumentoTareas(List<TareaRequest> tareaRequests) {
+            this.tareaRequests = new ArrayList<>(tareaRequests);
         }
     }
     private Path path;
     private final XmlMapper mapper;
     private final AtomicLong secuencia = new AtomicLong();
-    private List<Tarea> lista;
+    private List<TareaRequest> lista;
     public TareaRepositoryXml(Path path, XmlMapper mapper) {
         this.path = path;
         this.mapper = mapper;
@@ -38,13 +38,12 @@ public class TareaRepositoryXml implements ITareaRepository {
     public TareaRepositoryXml() {
         path = Path.of("data", "tarea.xml");
         mapper = new XmlMapper();
-        lista = findAll();
     }
 
     @Override
-    public Tarea create(String titulo) {
+    public TareaRequest create(String titulo) {
         long id = secuencia.incrementAndGet();
-        var tarea = new Tarea(id, titulo.strip());
+        var tarea = new TareaRequest(id, titulo.strip());
         lista.add(tarea);
         saveAll(lista);
         return tarea;
@@ -52,47 +51,47 @@ public class TareaRepositoryXml implements ITareaRepository {
 
     @Override
     public boolean delete(Long identificador) {
-        List<Tarea> tareas = findAll();
-        boolean removed = tareas.removeIf(t -> t.id() == identificador);
+        List<TareaRequest> tareaRequests = findAll();
+        boolean removed = tareaRequests.removeIf(t -> t.id() == identificador);
         if (removed) {
-            saveAll(tareas);
+            saveAll(tareaRequests);
         }
         return removed;
     }
 
     @Override
-    public List<Tarea> findAll() {
+    public List<TareaRequest> findAll() {
         if (Files.notExists(path)) {
             return new ArrayList<>();
         }
         DocumentoTareas data = mapper.readValue(path.toFile(), DocumentoTareas.class);
-        return new ArrayList<>(data.tareas);
+        return new ArrayList<>(data.tareaRequests);
     }
 
     @Override
-    public Tarea findById(long identificador) {
+    public TareaRequest findById(long identificador) {
         return findAll().stream().filter(t -> t.id() == identificador).findFirst().orElse(null);
     }
 
     @Override
-    public Tarea update(Tarea tarea) {
-        List<Tarea> tareas = findAll();
-        for (int i = 0; i < tareas.size(); i++) {
-            if (tareas.get(i).id() == tarea.id()) {
-                tareas.set(i, tarea);
-                saveAll(tareas);
-                return tarea;
+    public TareaRequest update(TareaRequest tareaRequest) {
+        List<TareaRequest> tareaRequests = findAll();
+        for (int i = 0; i < tareaRequests.size(); i++) {
+            if (tareaRequests.get(i).id() == tareaRequest.id()) {
+                tareaRequests.set(i, tareaRequest);
+                saveAll(tareaRequests);
+                return tareaRequest;
             }
         }
         return null;
     }
-    private void saveAll(List<Tarea> tareas) {
+    private void saveAll(List<TareaRequest> tareaRequests) {
         try {
             Path parent = path.getParent();
             if (parent != null) {
                 Files.createDirectories(parent);
             }
-            mapper.writerWithDefaultPrettyPrinter().writeValue(path.toFile(), new DocumentoTareas(tareas));
+            mapper.writerWithDefaultPrettyPrinter().writeValue(path.toFile(), new DocumentoTareas(tareaRequests));
         } catch (Exception e) {
             // Logger
             throw new RuntimeException("Error al utilizar SaveAll en XML", e);
