@@ -1,0 +1,16 @@
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/PeliculasApplication.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/controller/PeliculaJdbcController.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/controller/api/PeliculaEdicionRequest.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/controller/api/PeliculaRequest.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/controller/api/PeliculaResponse.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/controller/mapper/PeliculaApiMapper.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/model/Pelicula.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/repository/jdbc/IPeliculaRepository.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/repository/jdbc/PeliculaEntity.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/repository/jdbc/PeliculaEntityMapper.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/repository/jdbc/PeliculaJdbcRepository.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/repository/jdbc/PeliculaRowMapper.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/service/PeliculaService.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/service/mapper/PeliculaDominioMapper.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/service/modelo/DatosCreacionPelicula.java
+/home/alumno/aed-2dam/Spring/practica-peliculas-jdbc/src/main/java/ies/puesto/peliculas/service/modelo/DatosEdicionPelicula.java
