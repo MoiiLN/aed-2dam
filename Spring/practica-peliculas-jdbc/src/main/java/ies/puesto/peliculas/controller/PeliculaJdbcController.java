@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +49,12 @@ public class PeliculaJdbcController {
             @ApiResponse(responseCode = "404", description = "Pelicula no encontrada.")
     })
     public ResponseEntity<?> obtener(@PathVariable @Pattern(regexp = "^PEL[0-9]{3}$") String codigo) {
-        return ResponseEntity.of(peliculaService.obtener(codigo));
+        Optional<Pelicula> result = peliculaService.obtener(codigo);
+        if (result.isPresent()) {
+            PeliculaResponse response = PeliculaApiMapper.aRespuesta(result.get());
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
@@ -64,7 +68,7 @@ public class PeliculaJdbcController {
         Optional<Pelicula> result = peliculaService.crear(datos);
         if (result.isPresent()) {
             PeliculaResponse response = PeliculaApiMapper.aRespuesta(result.get());
-            return ResponseEntity.created(URI.create("api/v1/jdbc/peliculas" + response.codigo())).body(response);
+            return ResponseEntity.created(URI.create("/api/v1/jdbc/peliculas/" + response.codigo())).body(response);
         }
         return ResponseEntity.badRequest().build();
     }
@@ -81,7 +85,7 @@ public class PeliculaJdbcController {
         Optional<Pelicula> result = peliculaService.actualizar(codigo, datos);
         if (result.isPresent()) {
             PeliculaResponse response = PeliculaApiMapper.aRespuesta(result.get());
-            return ResponseEntity.created(URI.create("api/v1/jdbc/peliculas" + response.codigo())).body(response);
+            return ResponseEntity.ok(response);
         }
         return ResponseEntity.badRequest().build();
 
@@ -90,7 +94,7 @@ public class PeliculaJdbcController {
     @DeleteMapping("/{codigo}")
     @Operation(summary = "Eliminar una pelicula en Jdbc")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Sin cuerpo."),
+            @ApiResponse(responseCode = "204", description = ""),
             @ApiResponse(responseCode = "400", description = "La pelicula ya existe."),
             @ApiResponse(responseCode = "404", description = "La pelicula que intentas eliminar no existe.")
     })
@@ -98,7 +102,7 @@ public class PeliculaJdbcController {
             @PathVariable @Pattern(regexp = "^PEL[0-9]{3}$") String codigo) {
         boolean deleted = peliculaService.eliminar(codigo);
         if (deleted) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build(); // Devueleve 204 indicando que la operación ha salido bien sin contenido a devolver.
         }
         return ResponseEntity.notFound().build();
     }

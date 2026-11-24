@@ -1,7 +1,5 @@
 package ies.puesto.peliculas.repository.jdbc;
 
-import org.springframework.stereotype.Component;
-
 public class PeliculaEntity {
     private final String codigoFila;
     private final String tituloFila;

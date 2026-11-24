@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service("tareaServiceCsv")
 public class TareaServiceCsv implements ITareaService {
+    private final AtomicLong secuencia = new AtomicLong();
     private final ConcurrentSkipListMap<Long, TareaRequest> tareas = new ConcurrentSkipListMap<>();
     private final ITareaRepository repository;
 
