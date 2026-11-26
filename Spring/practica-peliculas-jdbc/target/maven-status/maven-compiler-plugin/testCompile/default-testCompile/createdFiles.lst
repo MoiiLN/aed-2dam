@@ -1,0 +1,4 @@
+ies/puesto/peliculas/controller/mapper/PeliculaApiMapperTest.class
+ies/puesto/peliculas/repository/jdbc/PeliculaEntityMapperTest.class
+ies/puesto/peliculas/repository/jdbc/PeliculaRowMapperTest.class
+ies/puesto/peliculas/service/mapper/PeliculaDominioMapperTest.class

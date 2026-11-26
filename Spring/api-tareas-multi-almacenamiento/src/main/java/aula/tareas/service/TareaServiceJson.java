@@ -1,6 +1,9 @@
 package aula.tareas.service;
 
 import aula.tareas.api.TareaRequest;
+import aula.tareas.mapper.TareaMapperApi;
+import aula.tareas.mapper.TareaMapperJson;
+import aula.tareas.mapper.TareaMapperServicio;
 import aula.tareas.modelo.Tarea;
 import aula.tareas.repository.ITareaRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-
+@Service("tareaServiceJson")
 public class TareaServiceJson implements ITareaService {
     private final ITareaRepository repository;
 
@@ -19,31 +22,26 @@ public class TareaServiceJson implements ITareaService {
 
     @Override
     public List<Tarea> listar() {
-        // TODO: Recuperar el listado mediante el repositorio.
-        throw new UnsupportedOperationException("Pendiente de implementar");
+        return repository.findAll();
     }
 
     @Override
     public Optional<Tarea> buscar(long id) {
-        // TODO: Consultar el repositorio con el identificador.
-        throw new UnsupportedOperationException("Pendiente de implementar");
+        return repository.findById(id);
     }
 
     @Override
     public Tarea crear(TareaRequest request) {
-        // TODO: Convertir la petición a dominio y solicitar el alta.
-        throw new UnsupportedOperationException("Pendiente de implementar");
+        return repository.create(TareaMapperServicio.toDomain(request));
     }
 
     @Override
     public Optional<Tarea> actualizar(long id, TareaRequest request) {
-        // TODO: Convertir la petición usando el ID y solicitar el cambio.
-        throw new UnsupportedOperationException("Pendiente de implementar");
+        return repository.update(TareaMapperServicio.toDomain(id, request));
     }
 
     @Override
     public boolean eliminar(long id) {
-        // TODO: Solicitar el borrado al repositorio.
-        throw new UnsupportedOperationException("Pendiente de implementar");
+        return repository.delete(id);
     }
 }

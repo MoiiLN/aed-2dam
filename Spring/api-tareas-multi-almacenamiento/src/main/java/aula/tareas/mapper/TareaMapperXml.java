@@ -1,7 +1,11 @@
 package aula.tareas.mapper;
 
+import aula.tareas.api.TareaResponse;
 import aula.tareas.entity.TareaEntityXml;
 import aula.tareas.modelo.Tarea;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class TareaMapperXml {
     private TareaMapperXml() {}

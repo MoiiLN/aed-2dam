@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-
+@Service("tareaServiceJdbc")
 public class TareaServiceJdbc implements ITareaService {
     private final ITareaRepository repository;
 

@@ -1,7 +1,10 @@
 package aula.tareas.mapper;
 
+import aula.tareas.api.TareaResponse;
 import aula.tareas.entity.TareaEntityCsv;
 import aula.tareas.modelo.Tarea;
+
+import java.util.List;
 
 public final class TareaMapperCsv {
     private TareaMapperCsv() {}
@@ -12,7 +15,7 @@ public final class TareaMapperCsv {
         );
     }
 
-    public static Tarea toDomain(TareaEntityCsv entity) {
+    public static Tarea toDomain(TareaEntityCsv entity) { // Added
         return new Tarea(
                 entity.getIdTarea(), entity.getNombreTarea()
         );
